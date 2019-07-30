@@ -1,0 +1,39 @@
+version: '3.5'
+
+networks:
+  default_net:
+
+services:
+  db:
+    container_name: psql
+    image: mdillon/postgis:9.6-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_USER=root
+      - POSTGRES_DB=benefits
+      - PG_TRUST_LOCALNET=true
+    networks:
+      default_net:
+
+  auths_service:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./auths_service/Dockerfile
+      args:
+        ENV_MODE: Develop
+    ports:
+      - "5000:5000"
+    image: auths_service
+    volumes:
+      - ./auths_service/:/app/auths_service/
+    depends_on:
+      - db
+    command: flask run
+    environment:
+      - MODE=dev
+      - SERVER_URL='http://admin:pass@db.scanitive.ryan-gordon.me:5984'
+    networks:
+      default_net:
