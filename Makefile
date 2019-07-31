@@ -124,3 +124,9 @@ test-coverage:  ##  test-coverage
 report-html:  ##  view coverage report in browser
 	@-google-chrome htmlcov/index.html
 
+
+docker-rmi:
+	@-docker rmi -f $(docker images)
+
+docker-rm:
+	@-docker rm $(docker ps -a -q)

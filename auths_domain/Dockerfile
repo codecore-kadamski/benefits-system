@@ -1,4 +1,4 @@
-FROM python:3.7.3
+FROM python:3.7-alpine
 
 RUN apt-get update && apt-get install --yes binutils libpq-dev
 
@@ -17,15 +17,8 @@ COPY auths_domain/pyproject.toml .
 # install dependencies:
 RUN poetry install -n --no-dev
 
-ARG ENV_MODE=Develop
 ENV PYTHONPATH=/app/
 ENV FLASK_APP=.
-
-RUN if [ "$ENV_MODE" != "Staging" ] ; then poetry install -n; fi
-
-# get wait-for-it.sh
-#ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/54d1f0bfeb6557adf8a3204455389d0901652242/wait-for-it.sh .
-#RUN chmod 755 wait-for-it.sh
 
 COPY auths_domain/ .
 

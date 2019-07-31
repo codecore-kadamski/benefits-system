@@ -33,6 +33,7 @@ def create_app():
     with app.app.app_context():
         # Imports
         from . import routes
+        from . import models
 
         # Create tables for our models
         db.create_all()

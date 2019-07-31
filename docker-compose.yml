@@ -6,7 +6,7 @@ networks:
 services:
   db:
     container_name: psqldb
-    image: mdillon/postgis:9.6-alpine
+    image: postgres:12-alpine
     ports:
       - "5432:5432"
     environment:
