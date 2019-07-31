@@ -1,23 +1,16 @@
-import os
-import connexion
+# from api.routes import *
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_injector import FlaskInjector
+import connexion
 from connexion.resolver import RestyResolver
-from api.views import UserProvider
+from .views import UserProvider
 
 from injector import Binder
 from flask_cors import CORS
 
 
 db = SQLAlchemy()
-POSTGRES = {
-    'user': 'postgres',
-    'pw': 'password',
-    'db': 'my_database',
-    'host': 'localhost',
-    'port': '5432',
-}
 
 
 def configure(binder: Binder) -> Binder:
@@ -27,12 +20,20 @@ def configure(binder: Binder) -> Binder:
     return binder
 
 
-if __name__ == '__main__':
+def create_app():
+    """Construct the core application."""
+    #  app = Flask(__name__, instance_relative_config=False)
     app = connexion.FlaskApp(__name__, specification_dir='.')  # Provide the app and the directory of the docs
-    app.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
     db.init_app(app.app)
-    db.create_all()
+    app.app.config.from_object('config.Config')
     CORS(app.app)
     app.add_api('api.yml', resolver=RestyResolver('api'))
     FlaskInjector(app=app.app, modules=[configure])
-    app.run(port=int(os.environ.get('PORT', 5000)), debug=True)  # os.environ is handy if you intend to launch on heroku
+
+    with app.app.app_context():
+        # Imports
+        from . import routes
+
+        # Create tables for our models
+        db.create_all()
+        return app

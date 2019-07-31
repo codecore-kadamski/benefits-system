@@ -11,8 +11,9 @@ basePath: /api/v1
 schemes:
  - http
 paths:
-  /users/:
+  /users:
     get:
+      operationId: api.routes.search
       responses:
         '200':
           description: 'Fetch a list of users'

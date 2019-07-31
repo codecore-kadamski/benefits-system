@@ -5,7 +5,7 @@ networks:
 
 services:
   db:
-    container_name: psql
+    container_name: psqldb
     image: mdillon/postgis:9.6-alpine
     ports:
       - "5432:5432"
@@ -13,27 +13,33 @@ services:
       - POSTGRES_PASSWORD=test
       - POSTGRES_USER=root
       - POSTGRES_DB=benefits
+      - POSTGRES_HOST=psqldb
       - PG_TRUST_LOCALNET=true
     networks:
       default_net:
 
-  auths_service:
+  auths_domain:
+    container_name: auths_domain
     restart: always
     build:
       context: .
-      dockerfile: ./auths_service/Dockerfile
+      dockerfile: ./auths_domain/Dockerfile
       args:
         ENV_MODE: Develop
     ports:
       - "5000:5000"
-    image: auths_service
+    image: auths_domain
     volumes:
-      - ./auths_service/:/app/auths_service/
+      - ./auths_domain/:/app/
     depends_on:
       - db
-    command: flask run
+    #  command: flask run
+    command: gunicorn --bind 0.0.0.0:5000 wsgi:application
     environment:
-      - MODE=dev
-      - SERVER_URL='http://admin:pass@db.scanitive.ryan-gordon.me:5984'
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_USER=root
+      - POSTGRES_DB=benefits
+      - POSTGRES_HOST=psqldb
+      - PG_TRUST_LOCALNET=true
     networks:
       default_net:
