@@ -1,37 +1,3 @@
-# HERE = $(shell pwd)
-# VENV = .
-# VIRTUALENV = .venv
-# BIN = $(VENV)/bin
-# PYTHON = $(BIN)/python
-
-# INSTALL = $(BIN)/pip install --no-deps
-
-# .PHONY: all test docs build_extras
-
-# all: build
-
-# $(PYTHON):
-# 	$(VIRTUALENV) $(VTENV_OPTS) $(VENV)
-
-# build: $(PYTHON)
-# 	$(PYTHON) setup.py develop
-
-# clean:
-# 	rm -rf $(VENV)
-
-# test_dependencies:
-# 	$(BIN)/pip install flake8 tox
-
-# test: build test_dependencies
-# 	$(BIN)/tox
-
-# run:
-# 	FLASK_APP=auth-service bin/flask run
-
-# start:  ##  start project in containers
-# 	@-docker-compose up --build -d
-
-
 SHELL := /bin/bash
 SERVER_ROOT := c4a_smart
 APPS := '${SERVER_ROOT}.apps.$(app)'

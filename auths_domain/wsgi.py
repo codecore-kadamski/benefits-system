@@ -1,7 +1,9 @@
 import os
-from api import create_app
+#  from api import create_app
+#  app = application = create_app(os.getenv('ENVIRON', 'dev'))
+from api import app
 
-app = application = create_app(os.getenv('ENVIRON', 'dev'))
+application = app
 
 
 if __name__ == '__main__':

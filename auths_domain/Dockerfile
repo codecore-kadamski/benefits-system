@@ -19,7 +19,7 @@ RUN poetry install -n --no-dev
 
 ENV PYTHONPATH=/app/
 ENV FLASK_APP=.
-ENV ENVIRON=dev
+ENV ENVIRON=prod
 
 COPY auths_domain/ .
 

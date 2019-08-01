@@ -1,6 +1,10 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_injector import FlaskInjector
+
+from flask_script import Manager
+from flask_migrate import Migrate, MigrateCommand
 
 import connexion
 from connexion.resolver import RestyResolver
@@ -24,20 +28,19 @@ def configure(binder: Binder) -> Binder:
 def create_app(config_name):
     app = connexion.FlaskApp(__name__, specification_dir='../')
     app.add_api('swagger.yml', resolver=RestyResolver('api'))
-
     app.app.config.from_object(config_by_name[config_name])
-
-    db.init_app(app.app)
-    #  db.create_all()
-
     CORS(app.app)
     FlaskInjector(app=app.app, modules=[configure])
+
+    db.init_app(app.app)
 
     with app.app.app_context():
 
         from . import routes
         from . import models
 
-        # Create tables for our models
         db.create_all()
-        return app
+        return app, db
+
+
+#  app = create_app(os.getenv('ENVIRON', 'dev'))

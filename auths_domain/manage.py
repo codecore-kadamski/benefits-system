@@ -2,21 +2,31 @@ import os
 import unittest
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-from api import create_app, db
-import api.models
+from api import create_app
+#  from api.models import *
 
 
-app = create_app(os.getenv('ENVIRON', 'dev')).app
-app.app_context().push()
+app, db = create_app(os.getenv('ENVIRON', 'prod'))
+app.app.app_context().push()
 
-migrate = Migrate(app, db)
-manager = Manager(app)
+migrate = Migrate(app.app, db)
+manager = Manager(app.app)
 manager.add_command('db', MigrateCommand)
 
 
 @manager.command
 def run():
     app.run()
+
+
+@manager.command
+def drop_all():
+    db.drop_all()
+
+
+@manager.command
+def create_all():
+    db.create_all()
 
 
 @manager.command

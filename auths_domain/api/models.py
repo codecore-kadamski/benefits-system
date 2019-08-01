@@ -2,11 +2,16 @@
 #  from flask_sqlalchemy import SQLAlchemy
 import datetime
 from . import db
+from sqlalchemy import Column, DateTime, String, Integer, func  
+from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class BaseModel(UserMixin, db.Model):
+Base = declarative_base()
+
+
+class BaseModel(Base):
     """Base data model for all objects"""
     __abstract__ = True
 
@@ -30,7 +35,7 @@ class BaseModel(UserMixin, db.Model):
         }
 
 
-class UserModel(BaseModel, db.Model):
+class UserModel(BaseModel, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
