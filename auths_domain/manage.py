@@ -3,7 +3,7 @@ import unittest
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from api import create_app, db
-from api.models import *
+import api.models
 
 
 app = create_app(os.getenv('ENVIRON', 'dev')).app

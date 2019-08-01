@@ -21,12 +21,15 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY', 'H*%@B^*5t86exh834')
 
     # Database
-    SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+    #  SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+    #  SQLALCHEMY_DATABASE_URI = 'sqlite:///{basedir}/data.db'.format(basedir=basedir)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///data.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", False)
 
 
 class ProductionConfig(Config):
     DEBUG = False
+    SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 
 class DevelopmentConfig(Config):

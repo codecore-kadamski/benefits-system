@@ -83,6 +83,7 @@ start-db: #  run postgres container
 
 start-local-server: #  start server
 	@-poetry run gunicorn -b 0.0.0.0:5000
+	poetry run gunicorn -c gunicorn_config.py wsgi
 
 init-users: ##  create defaults users and groups
 	@-poetry run python manage.py initusers
