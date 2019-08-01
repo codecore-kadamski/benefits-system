@@ -6,7 +6,7 @@ networks:
 services:
   db:
     container_name: psqldb
-    image: postgres:12-alpine
+    image: postgres:12
     ports:
       - "5432:5432"
     environment:
@@ -18,28 +18,28 @@ services:
     networks:
       default_net:
 
-  auths_domain:
-    container_name: auths_domain
-    restart: always
-    build:
-      context: .
-      dockerfile: ./auths_domain/Dockerfile
-      args:
-        ENV_MODE: Develop
-    ports:
-      - "5000:5000"
-    image: auths_domain
-    volumes:
-      - ./auths_domain/:/app/
-    depends_on:
-      - db
-    #  command: flask run
-    command: gunicorn --bind 0.0.0.0:5000 wsgi:application
-    environment:
-      - POSTGRES_PASSWORD=test
-      - POSTGRES_USER=root
-      - POSTGRES_DB=benefits
-      - POSTGRES_HOST=psqldb
-      - PG_TRUST_LOCALNET=true
-    networks:
-      default_net:
+  # auths_domain:
+  #   container_name: auths_domain
+  #   restart: always
+  #   build:
+  #     context: .
+  #     dockerfile: ./auths_domain/Dockerfile
+  #     args:
+  #       ENV_MODE: Develop
+  #   ports:
+  #     - "5000:5000"
+  #   image: auths_domain
+  #   volumes:
+  #     - ./auths_domain/:/app/
+  #   depends_on:
+  #     - db
+  #   #  command: flask run
+  #   command: gunicorn --bind 0.0.0.0:5000 wsgi:application
+  #   environment:
+  #     - POSTGRES_PASSWORD=test
+  #     - POSTGRES_USER=root
+  #     - POSTGRES_DB=benefits
+  #     - POSTGRES_HOST=psqldb
+  #     - PG_TRUST_LOCALNET=true
+  #   networks:
+  #     default_net:

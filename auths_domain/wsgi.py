@@ -1,7 +1,7 @@
 import os
 from api import create_app
 
-application = create_app()
+application = create_app('dev')
 
 
 if __name__ == '__main__':

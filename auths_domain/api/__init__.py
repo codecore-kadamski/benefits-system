@@ -1,11 +1,12 @@
-# from api.routes import *
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_injector import FlaskInjector
+
 import connexion
 from connexion.resolver import RestyResolver
 from .views import UserProvider
 
+from config import config_by_name
 from injector import Binder
 from flask_cors import CORS
 
@@ -20,18 +21,20 @@ def configure(binder: Binder) -> Binder:
     return binder
 
 
-def create_app():
-    """Construct the core application."""
-    #  app = Flask(__name__, instance_relative_config=False)
-    app = connexion.FlaskApp(__name__, specification_dir='.')  # Provide the app and the directory of the docs
+def create_app(config_name):
+    app = connexion.FlaskApp(__name__, specification_dir='../')
+    app.add_api('swagger.yml', resolver=RestyResolver('api'))
+
+    app.app.config.from_object(config_by_name[config_name])
+
     db.init_app(app.app)
-    app.app.config.from_object('config.Config')
+    #  db.create_all()
+
     CORS(app.app)
-    app.add_api('api.yml', resolver=RestyResolver('api'))
     FlaskInjector(app=app.app, modules=[configure])
 
     with app.app.app_context():
-        # Imports
+
         from . import routes
         from . import models
 

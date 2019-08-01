@@ -1,7 +1,7 @@
 # from flask import current_app as app
 #  from flask_sqlalchemy import SQLAlchemy
 import datetime
-from . import db
+from api import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
