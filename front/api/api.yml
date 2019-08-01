@@ -1,0 +1,95 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger REST Article
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+basePath: /api/v1
+schemes:
+ - http
+paths:
+  /users:
+    get:
+      operationId: api.routes.search
+      responses:
+        '200':
+          description: 'Fetch a list of users'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+
+  /users/create:
+    post:
+      operationId: api.routes.create
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: data
+        description: uzytkownik to add
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        201:
+          description: Successfully added product to the DB
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing item already exists
+
+
+  /users/{user_id}:
+      get:
+        operationId: api.routes.read
+        parameters:
+          - in: path
+            name: user_id
+            type: string
+            required: true
+            description: Numeric ID of the user to get.
+        responses:
+          '200':
+            description: 'Fetch a product from the database'
+            schema:
+                $ref: '#/definitions/User'
+      delete:
+        tags:
+        - public
+        parameters:
+          - in: path
+            name: user_id
+            type: string
+            required: true
+            description: Numeric ID of the user to get.    
+        operationId: api.routes.delete
+        responses:
+          200:
+            description: Successfully deleted product 
+          400:
+            description: invalid input, object invalid
+          409:
+            description: conflict error
+          401:
+            description: Not correctly authorized
+
+
+# tags are used for organizing operations
+tags:
+- name: public
+  description: Operations available to regular developers
+
+definitions:
+  User:
+    type: object
+    properties:
+      id:  { type: string }
+      username: { type: string }
+      email: { type: string }
+      age:
+        type: number

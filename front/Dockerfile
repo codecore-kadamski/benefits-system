@@ -1,6 +1,6 @@
-FROM python:3.7.3
+FROM python:3.7-slim
 
-RUN apt-get update && apt-get install --yes binutils libpq-dev
+RUN apt-get update && apt-get install --yes binutils libpq-dev psycopg2-binary
 
 # install poetry (versions should be updated manually)
 #RUN pip install pip==19.1.1 poetry==0.12.16 && poetry config settings.virtualenvs.create false

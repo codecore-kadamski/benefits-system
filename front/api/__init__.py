@@ -1,5 +1,4 @@
 # from api.routes import *
-import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_injector import FlaskInjector
@@ -9,11 +8,9 @@ from .views import UserProvider
 
 from injector import Binder
 from flask_cors import CORS
-from .config import SETTINGS
 
 
 db = SQLAlchemy()
-app_settings = 'api.config.{}'.format(SETTINGS.get('APP_SETTINGS', 'DevConfig'))
 
 
 def configure(binder: Binder) -> Binder:
@@ -24,12 +21,14 @@ def configure(binder: Binder) -> Binder:
 
 
 def create_app():
+    """Construct the core application."""
+    #  app = Flask(__name__, instance_relative_config=False)
     app = connexion.FlaskApp(__name__, specification_dir='.')  # Provide the app and the directory of the docs
-    app.app.config.from_object(app_settings)
+    db.init_app(app.app)
+    app.app.config.from_object('config.Config')
     CORS(app.app)
     app.add_api('api.yml', resolver=RestyResolver('api'))
     FlaskInjector(app=app.app, modules=[configure])
-    db.init_app(app.app)
 
     with app.app.app_context():
         # Imports
