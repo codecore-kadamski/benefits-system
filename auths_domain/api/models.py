@@ -1,8 +1,5 @@
-# from flask import current_app as app
-#  from flask_sqlalchemy import SQLAlchemy
 import datetime
-from . import db
-from sqlalchemy import Column, DateTime, String, Integer, func  
+from sqlalchemy import Column, DateTime, String, Integer, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -26,9 +23,6 @@ class BaseModel(Base):
         })
 
     def json(self):
-        """
-                Define a base way to jsonify models, dealing with datetime objects
-        """
         return {
             column: value if not isinstance(value, datetime.date) else value.strftime('%Y-%m-%d')
             for column, value in self._to_dict().items()
@@ -38,19 +32,13 @@ class BaseModel(Base):
 class UserModel(BaseModel, UserMixin):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True, nullable=False)
-    password = db.Column(db.String(200), unique=False, nullable=False)
-    email = db.Column(db.String(80), unique=True, nullable=False)
-    age = db.Column(db.Integer, unique=False, nullable=True)
-    created = db.Column(db.DateTime,
-                        index=False,
-                        unique=False,
-                        nullable=False)
-    admin = db.Column(db.Boolean,
-                      index=False,
-                      unique=False,
-                      nullable=False)
+    id = Column(Integer, primary_key=True)
+    username = Column(String(64), unique=True, nullable=False)
+    password = Column(String(200), unique=False, nullable=False)
+    email = Column(String(80), unique=True, nullable=False)
+    age = Column(Integer, unique=False, nullable=True)
+    created = Column(DateTime, index=False, unique=False, nullable=False)
+    admin = Column(Boolean, index=False, unique=False, nullable=False)
 
     def __init__(self, *args, **kw):
         super(UserModel, self).__init__(*args, **kw)

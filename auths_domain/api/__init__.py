@@ -1,10 +1,6 @@
-import os
-from flask import Flask
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_injector import FlaskInjector
-
-from flask_script import Manager
-from flask_migrate import Migrate, MigrateCommand
 
 import connexion
 from connexion.resolver import RestyResolver
@@ -41,6 +37,3 @@ def create_app(config_name):
 
         db.create_all()
         return app, db
-
-
-#  app = create_app(os.getenv('ENVIRON', 'dev'))
