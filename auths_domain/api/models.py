@@ -4,14 +4,14 @@ from sqlalchemy import Column, DateTime, String, Integer, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import current_app as app
+from api import app
 
 
 Base = declarative_base()
+SECRET_KEY = app.app.config.get('SECRET_KEY')
 
 
 class BaseModel(Base):
-    """Base data model for all objects"""
     __abstract__ = True
 
     def __init__(self, *args):
@@ -61,7 +61,7 @@ class UserModel(BaseModel, UserMixin):
             }
             return jwt.encode(
                 payload,
-                app.config.get('SECRET_KEY'),
+                SECRET_KEY,
                 algorithm='HS256'
             )
         except Exception as e:
@@ -75,7 +75,7 @@ class UserModel(BaseModel, UserMixin):
         :return: integer|string
         """
         try:
-            payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
+            payload = jwt.decode(auth_token, SECRET_KEY)
             return payload['sub']
         except jwt.ExpiredSignatureError:
             return 'Signature expired. Please log in again.'
