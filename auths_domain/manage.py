@@ -1,12 +1,9 @@
-import os
 import unittest
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-from api import create_app
-#  from api.models import *
+from wsgi import app, db
 
 
-app, db = create_app(os.getenv('ENVIRON', 'prod'))
 app.app.app_context().push()
 
 migrate = Migrate(app.app, db)
@@ -20,13 +17,15 @@ def run():
 
 
 @manager.command
-def drop_all():
-    db.drop_all()
+def create_db():
+    """Creates the db tables."""
+    db.create_all()
 
 
 @manager.command
-def create_all():
-    db.create_all()
+def drop_db():
+    """Drops the db tables."""
+    db.drop_all()
 
 
 @manager.command

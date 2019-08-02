@@ -27,8 +27,6 @@ config.set_main_option(
         'SQLALCHEMY_DATABASE_URI').replace('%', '%%'))
 
 target_metadata = current_app.extensions['migrate'].db.metadata
-from api.models import UserModel
-target_metadata = UserModel.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

@@ -1,8 +1,10 @@
+import jwt
 import datetime
 from sqlalchemy import Column, DateTime, String, Integer, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from . import current_app as app
 
 
 Base = declarative_base()
@@ -32,26 +34,53 @@ class BaseModel(Base):
 class UserModel(BaseModel, UserMixin):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    email = Column(String(80), unique=True, nullable=False)
     username = Column(String(64), unique=True, nullable=False)
     password = Column(String(200), unique=False, nullable=False)
-    email = Column(String(80), unique=True, nullable=False)
-    age = Column(Integer, unique=False, nullable=True)
     created = Column(DateTime, index=False, unique=False, nullable=False)
     admin = Column(Boolean, index=False, unique=False, nullable=False)
 
-    def __init__(self, *args, **kw):
-        super(UserModel, self).__init__(*args, **kw)
-        self._authenticated = False
+    def __init__(self, email, username, password, admin=False):
+        self.email = email
+        self.password = generate_password_hash(password, method='sha256').decode()
+        self.created = datetime.datetime.now()
+        self.admin = admin
+        self.username = username
 
-    @property
-    def is_authenticated(self):
-        return self._authenticated
+    def encode_auth_token(self, user_id):
+        """
+        Generates the Auth Token
+        :return: string
+        """
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+                'iat': datetime.datetime.utcnow(),
+                'sub': user_id
+            }
+            return jwt.encode(
+                payload,
+                app.config.get('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
 
-    def authenticate(self, password):
-        checked = check_password_hash(self.password, password)
-        self._authenticated = checked
-        return self._authenticated
+    @staticmethod
+    def decode_auth_token(auth_token):
+        """
+        Validates the auth token
+        :param auth_token:
+        :return: integer|string
+        """
+        try:
+            payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
+            return 'Signature expired. Please log in again.'
+        except jwt.InvalidTokenError:
+            return 'Invalid token. Please log in again.'
 
     def set_password(self, password):
         """Create hashed password."""
