@@ -32,7 +32,11 @@ help:
 
 migrations:  ##  migracje
 	@-poetry run python manage.py db migrate
-	##@-poetry run python manage.py db upgrade
+	@-poetry run python manage.py db upgrade
+
+migrations-test:  ## migracje-testowe
+	@-rm data-test.db
+	@-rm data.db
 
 start-local-server:  ##  start local server
 	@-poetry run gunicorn -c gunicorn_config wsgi
@@ -47,8 +51,8 @@ stop:  ##  stop project
 develop:  ##  poetry install requirements
 	@-poetry install -n
 
-test:  ##  uruchamiamy testy
-	@-poetry run python manage.py test
+test: migrations-test  ##  uruchamiamy testy
+	@-export ENVIRON="test" && poetry run python manage.py create_db && poetry run python manage.py db upgrade && poetry run python manage.py test
 
 docker-rmi:
 	@-docker rmi -f $(docker images)

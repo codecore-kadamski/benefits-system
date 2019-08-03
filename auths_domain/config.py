@@ -22,8 +22,8 @@ class Config(object):
 
     # Database
     #  SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-    #  SQLALCHEMY_DATABASE_URI = 'sqlite:///{basedir}/data.db'.format(basedir=basedir)
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///data.db'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///{basedir}/data.db'.format(basedir=basedir)
+    #  SQLALCHEMY_DATABASE_URI = 'sqlite:///data.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", False)
 
 
@@ -38,6 +38,8 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
+    #  SQLALCHEMY_DATABASE_URI = 'sqlite:///data-test.db'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///{basedir}/data-test.db'.format(basedir=basedir)
     TESTING = True
 
 

@@ -43,7 +43,7 @@ class UserModel(BaseModel, UserMixin):
 
     def __init__(self, email, username, password, admin=False):
         self.email = email
-        self.password = generate_password_hash(password, method='sha256').decode()
+        self.password = generate_password_hash(password, method='sha256')
         self.created = datetime.datetime.now()
         self.admin = admin
         self.username = username
@@ -55,7 +55,7 @@ class UserModel(BaseModel, UserMixin):
         """
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=60),
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }

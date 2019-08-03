@@ -1,7 +1,8 @@
+import os
 import unittest
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-from api import app, db
+from api import app, db  # create_app
 
 
 app.app.app_context().push()
@@ -31,7 +32,8 @@ def drop_db():
 @manager.command
 def test():
     """Runs the unit tests."""
-    tests = unittest.TestLoader().discover('test', pattern='test*.py')
+    #  app = create_app(os.getenv('ENVIRON', 'test'))
+    tests = unittest.TestLoader().discover('tests', pattern='test*.py')
     result = unittest.TextTestRunner(verbosity=2).run(tests)
     if result.wasSuccessful():
         return 0

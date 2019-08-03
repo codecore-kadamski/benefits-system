@@ -11,6 +11,9 @@ from injector import Binder
 from flask_cors import CORS
 
 
+db = SQLAlchemy()
+
+
 def configure(binder: Binder) -> Binder:
     binder.bind(
         UserProvider
@@ -19,7 +22,6 @@ def configure(binder: Binder) -> Binder:
 
 
 def create_app(config_name):
-    db = SQLAlchemy()
     app = connexion.FlaskApp(__name__, specification_dir='../')
     app.add_api('swagger.yml', resolver=RestyResolver('api'))
     app.app.config.from_object(config_by_name[config_name])
@@ -27,13 +29,13 @@ def create_app(config_name):
     FlaskInjector(app=app.app, modules=[configure])
 
     db.init_app(app.app)
-    return app, db
+    #  return app
 
-    # with app.app.app_context():
-    #     #  from . import routes
-    #     #  from . import models
-    #     #  db.create_all()
-    #     return app, db
+    with app.app.app_context():
+        #from . import routes
+        #from . import models
+        #db.create_all()
+        return app
 
-
-app, db = create_app(os.getenv('ENVIRON', 'prod'))
+#print(os.getenv('ENVIRON', 'prod'))
+app = create_app(os.getenv('ENVIRON', 'prod'))
