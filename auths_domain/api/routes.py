@@ -1,6 +1,5 @@
-# from flask_injector import inject
 from injector import inject
-from .views import UserProvider
+from .views import UserProvider, AuthProvider
 
 
 @inject(data_provider=UserProvider)
@@ -26,3 +25,8 @@ def update(data_provider, data) -> str:
 @inject(data_provider=UserProvider)
 def delete(data_provider, user_id) -> str:
     return data_provider.delete_product(user_id)
+
+
+@inject(data_provider=AuthProvider)
+def register(data_provider, data) -> str:
+    return data_provider.register(data)

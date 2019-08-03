@@ -4,11 +4,11 @@ from sqlalchemy import Column, DateTime, String, Integer, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from api import app
+from config import key
 
 
+SECRET_KEY = key
 Base = declarative_base()
-SECRET_KEY = app.app.config.get('SECRET_KEY')
 
 
 class BaseModel(Base):

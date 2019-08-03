@@ -2,19 +2,19 @@ import os
 import unittest
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-from api import app, db  # create_app
+from app import current_app, db
 
 
-app.app.app_context().push()
+current_app.app.app_context().push()
 
-migrate = Migrate(app.app, db)
-manager = Manager(app.app)
+migrate = Migrate(current_app.app, db)
+manager = Manager(current_app.app)
 manager.add_command('db', MigrateCommand)
 
 
 @manager.command
 def run():
-    app.run()
+    current_app.run()
 
 
 @manager.command

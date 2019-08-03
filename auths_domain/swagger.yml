@@ -10,7 +10,24 @@ produces:
 basePath: /api/v1
 schemes:
  - http
+ - https
 paths:
+  /auth/register:
+    post:
+      operationId: api.routes.register
+      parameters:
+      - in: body
+        name: data
+        description: register new user
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        201:
+          description: Successfully create user
+        405:
+          description: Invalid input
+
   /users:
     get:
       operationId: api.routes.search
@@ -25,10 +42,6 @@ paths:
   /users/create:
     post:
       operationId: api.routes.create
-      consumes:
-      - application/json
-      produces:
-      - application/json
       parameters:
       - in: body
         name: data
@@ -87,9 +100,12 @@ tags:
 definitions:
   User:
     type: object
+    required:
+      - username
+      - password
+      - email
     properties:
-      id:  { type: string }
-      username: { type: string }
-      email: { type: string }
-      age:
-        type: number
+      id: { type: integer, format: int32}
+      username: { type: string, minLength: 5 }
+      email: { type: string, format: email }
+      password: { type: string, format: password }

@@ -18,29 +18,28 @@ services:
     networks:
       default_net:
 
-  auths_domain:
-    container_name: auths_domain
-    restart: always
-    build:
-      context: .
-      dockerfile: ./auths_domain/Dockerfile
-      args:
-        ENVIRON: prod
-    ports:
-      - "5000:5000"
-    image: auths_domain
-    volumes:
-      - ./auths_domain/:/app/
-    depends_on:
-      - db
-    #  command: flask run
-    command: gunicorn -c gunicorn_config wsgi
-    environment:
-      - POSTGRES_PASSWORD=test
-      - POSTGRES_USER=root
-      - POSTGRES_DB=benefits
-      - POSTGRES_HOST=psqldb
-      - PG_TRUST_LOCALNET=true
-      - ENVIRON=prod
-    networks:
-      default_net:
+  # auths_domain:
+  #   container_name: auths_domain
+  #   restart: always
+  #   build:
+  #     context: .
+  #     dockerfile: ./auths_domain/Dockerfile
+  #     args:
+  #       ENVIRON: prod
+  #   ports:
+  #     - "5000:5000"
+  #   image: auths_domain
+  #   volumes:
+  #     - ./auths_domain/:/app/
+  #   depends_on:
+  #     - db
+  #   command: gunicorn -c gunicorn_config wsgi
+  #   environment:
+  #     - POSTGRES_PASSWORD=test
+  #     - POSTGRES_USER=root
+  #     - POSTGRES_DB=benefits
+  #     - POSTGRES_HOST=psqldb
+  #     - PG_TRUST_LOCALNET=true
+  #     - ENVIRON=prod
+  #   networks:
+  #     default_net:
