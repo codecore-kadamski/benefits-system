@@ -39,3 +39,7 @@ def login(data_provider, data) -> str:
 @inject(data_provider=AuthProvider)
 def verify(data_provider) -> str:
     return data_provider.verify()
+
+@inject(data_provider=AuthProvider)
+def logout(data_provider) -> str:
+    return data_provider.logout()

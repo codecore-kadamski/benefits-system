@@ -17,7 +17,7 @@ securityDefinitions:
     type: apiKey
     name: Authorization
     in: header
-    x-apikeyInfoFunc: 'api.models.SECRET_KEY'
+    x-apikeyInfoFunc: 'api.models.apikey_info_func'
 
 security:
   - BearerAuth: []
@@ -92,6 +92,18 @@ paths:
           $ref: '#/definitions/AuthorizedSuccess'
         401:
           $ref: '#/definitions/UnauthorizedError'
+
+  /auth/logout:
+    get:
+      operationId: api.routes.logout
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: 'Successfully logged out.'
+        401:
+          description: 'Signature expired. Please log in again.'
+
 
   /users:
     get:

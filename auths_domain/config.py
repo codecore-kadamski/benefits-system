@@ -27,6 +27,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///{basedir}/data.db'.format(basedir=basedir)
     #  SQLALCHEMY_DATABASE_URI = 'sqlite:///data.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", False)
+    APIKEYINFO_FUNC = None
 
 
 class ProductionConfig(Config):
