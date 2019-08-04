@@ -1,7 +1,7 @@
 import unittest
 from flask_testing import TestCase
 from app import create_app, db
-from api.models import UserModel
+from api.models import User
 
 
 class TestUserModel(TestCase):
@@ -19,7 +19,7 @@ class TestUserModel(TestCase):
         self.db.drop_all()
 
     def test_encode_auth_token(self):
-        user = UserModel(
+        user = User(
             email='test@test.com',
             password='test',
             username='test'
@@ -32,7 +32,7 @@ class TestUserModel(TestCase):
 
     def test_decode_auth_token(self):
         #  self.db.table('users').delete()
-        user = UserModel(
+        user = User(
             email='test2@test.com',
             password='test',
             username='test2'
@@ -41,7 +41,7 @@ class TestUserModel(TestCase):
         self.db.session.commit()
         auth_token = user.encode_auth_token(user.id)
         self.assertTrue(isinstance(auth_token, bytes))
-        self.assertTrue(UserModel.decode_auth_token(auth_token) == 1)
+        self.assertTrue(User.decode_auth_token(auth_token) == 1)
 
 
 if __name__ == '__main__':
