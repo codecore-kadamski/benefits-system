@@ -24,24 +24,20 @@ class TestUserModel(TestCase):
             password='test',
             username='test'
         )
-
-        self.db.session.add(user)
-        self.db.session.commit()
+        user.save()
         auth_token = user.encode_auth_token(user.id)
         self.assertTrue(isinstance(auth_token, bytes))
 
     def test_decode_auth_token(self):
-        #  self.db.table('users').delete()
         user = User(
             email='test2@test.com',
             password='test',
             username='test2'
         )
-        self.db.session.add(user)
-        self.db.session.commit()
+        user.save()
         auth_token = user.encode_auth_token(user.id)
         self.assertTrue(isinstance(auth_token, bytes))
-        self.assertTrue(User.decode_auth_token(auth_token) == 1)
+        self.assertTrue(User.decode_auth_token(auth_token) == user.id)
 
 
 if __name__ == '__main__':

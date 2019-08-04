@@ -30,3 +30,12 @@ def delete(data_provider, user_id) -> str:
 @inject(data_provider=AuthProvider)
 def register(data_provider, data) -> str:
     return data_provider.register(data)
+
+
+@inject(data_provider=AuthProvider)
+def login(data_provider, data) -> str:
+    return data_provider.login(data)
+
+@inject(data_provider=AuthProvider)
+def verify(data_provider) -> str:
+    return data_provider.verify()

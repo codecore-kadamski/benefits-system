@@ -54,6 +54,9 @@ develop:  ##  poetry install requirements
 test: migrations-test  ##  uruchamiamy testy
 	@-export ENVIRON="test" && poetry run python manage.py create_db && poetry run python manage.py db upgrade && poetry run python manage.py test
 
+shell:
+	@-export ENVIRON="prod" && poetry run python manage.py shell
+
 docker-rmi:
 	@-docker rmi -f $(docker images)
 

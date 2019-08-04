@@ -11,6 +11,38 @@ basePath: /api/v1
 schemes:
  - http
  - https
+
+securityDefinitions:
+  BearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    x-apikeyInfoFunc: 'api.models.SECRET_KEY'
+
+security:
+  - BearerAuth: []
+
+definitions:
+  User:
+    type: object
+    required:
+      - username
+      - password
+      - email
+    properties:
+      id: { type: integer, format: int32}
+      username: { type: string, minLength: 3 }
+      email: { type: string, format: email }
+      password: { type: string, format: password }
+  UnauthorizedError:
+    description: Access token is missing or invalid
+  AuthorizedSuccess:
+    description: Access token verified
+  SuccessCreateUser:
+    description: Successfully create user
+  InvalidInput:
+    description: Invalid input
+
 paths:
   /auth/register:
     post:
@@ -22,11 +54,44 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/User'
+      security: []
       responses:
-        201:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/SuccessCreateUser"
+        405:
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/InvalidInput"
+
+  /auth/login:
+    post:
+      operationId: api.routes.login
+      parameters:
+      - in: body
+        name: data
+        description: login user
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      security: []
+      responses:
+        200:
           description: Successfully create user
         405:
           description: Invalid input
+
+  /auth/verify:
+    get:
+      operationId: api.routes.verify
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          $ref: '#/definitions/AuthorizedSuccess'
+        401:
+          $ref: '#/definitions/UnauthorizedError'
 
   /users:
     get:
@@ -90,22 +155,3 @@ paths:
             description: conflict error
           401:
             description: Not correctly authorized
-
-
-# tags are used for organizing operations
-tags:
-- name: public
-  description: Operations available to regular developers
-
-definitions:
-  User:
-    type: object
-    required:
-      - username
-      - password
-      - email
-    properties:
-      id: { type: integer, format: int32}
-      username: { type: string, minLength: 5 }
-      email: { type: string, format: email }
-      password: { type: string, format: password }
