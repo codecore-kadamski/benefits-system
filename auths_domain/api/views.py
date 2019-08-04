@@ -1,4 +1,4 @@
-from .models import UserModel
+from .models import User
 
 
 class UserProvider(object):
@@ -20,9 +20,25 @@ class AuthProvider(object):
     def __init__(self):
         pass
 
-    def __call__(self, *args, **kwargs):
-        import ipdb; ipdb.set_trace()
-        pass
-
     def register(self, data):
-        return {'register': True}, 201
+        user = User.query.filter(User.email == data.get('email') or User.username == data.get('username')).first()
+        if user:
+            return {
+                'status': 'fail',
+                'message': 'User already exists. Please Log in. or remind password by email',
+            }, 202
+        else:
+            try:
+                user = User(**data)
+                user.save()
+                auth_token = user.encode_auth_token(user.id)
+                return {
+                    'status': 'success',
+                    'message': 'Successfully registered.',
+                    'auth_token': auth_token.decode()
+                }
+            except Exception:
+                return {
+                    'status': 'fail',
+                    'message': 'Some error occurred. Please try again.'
+                }
