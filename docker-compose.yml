@@ -33,7 +33,7 @@ services:
   #     - ./auths_domain/:/app/
   #   depends_on:
   #     - db
-  #   command: gunicorn -c gunicorn_config wsgi
+  #   command: gunicorn -c gunicorn_config wsgi --access-logfile -
   #   environment:
   #     - POSTGRES_PASSWORD=test
   #     - POSTGRES_USER=root
