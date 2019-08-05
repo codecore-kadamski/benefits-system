@@ -1,0 +1,7 @@
+FROM nginx:latest
+COPY nginx/default.conf.template /etc/nginx/
+COPY nginx/htpasswd /etc/nginx/
+COPY nginx/run_nginx.sh /etc/nginx/
+COPY nginx/wait-for-it.sh /etc/nginx/
+COPY media /web/media/
+CMD ["/etc/nginx/wait-for-it.sh", "front:8000", "--", "/etc/nginx/run_nginx.sh"]

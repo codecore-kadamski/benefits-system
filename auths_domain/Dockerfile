@@ -23,4 +23,6 @@ ENV ENVIRON=prod
 
 COPY auths_domain/ .
 
+CMD ["gunicorn", "wsgi:application", "-w", "2", "-b", "0.0.0.0:5000", "--capture-output", "--access-logfile", "-", "--access-logformat", "%(h)s %(l)s %(u)s %(t)s \"%(r)s\" \"%(s)s\" %(b)s \"%(f)s\" \"%(a)s\" \"%({x-client}i)s\" \"%({Host}i)s\" \"%(L)s\" X-Mobile-Agent: \"%({x-mobile-agent}i)s\""]
+
 EXPOSE 5000

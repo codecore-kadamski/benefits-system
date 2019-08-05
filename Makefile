@@ -60,6 +60,7 @@ start-redis:
 # start: start-redis start-db migrations init-users start-local-server ##  start local server
 
 start:  ##  start project in containers
+	## docker volume create --name=front-media-volume
 	@-docker-compose up --build -d
 
 stop:  #  stop project
