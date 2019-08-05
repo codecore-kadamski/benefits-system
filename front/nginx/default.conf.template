@@ -14,10 +14,10 @@ http {
     include       /etc/nginx/mime.types;
     default_type  application/octet-stream;
 
-    log_format  main  '${DOLLAR}remote_addr - ${DOLLAR}remote_user [${DOLLAR}time_local] "${DOLLAR}request" '
-                  '"${DOLLAR}status" ${DOLLAR}body_bytes_sent "${DOLLAR}http_referer" '
-                  '"${DOLLAR}http_user_agent" "${DOLLAR}http_x_client" "${DOLLAR}http_host" "${DOLLAR}upstream_response_time" '
-                  'X-Mobile-Agent: "${DOLLAR}http_x_mobile_agent"';
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                  '"$status" $body_bytes_sent "$http_referer" '
+                  '"$http_user_agent" "$http_x_client" "$http_host" "$upstream_response_time" '
+                  'X-Mobile-Agent: "$http_x_mobile_agent"';
 
     access_log  /var/log/nginx/access.log  main;
 
@@ -26,11 +26,11 @@ http {
     keepalive_timeout  65;
 
     upstream front {
-        server ${WEB}:8000 fail_timeout=30s max_fails=5;
+        server front:8000 fail_timeout=30s max_fails=5;
     }
 
     server {
-        listen       80;
+        listen      benefits.adamski.local:80;
         server_name     benefits.adamski.local benefits.adamski.work;
 
         client_max_body_size  10m;
@@ -46,12 +46,11 @@ http {
         }
 
         location / {
-            auth_basic           ${BASIC_AUTH};
+            auth_basic off;
             auth_basic_user_file /etc/nginx/htpasswd;
-            proxy_set_header X-Real-IP  ${DOLLAR}remote_addr;
-            proxy_set_header X-Forwarded-For ${DOLLAR}remote_addr;
-            proxy_set_header Host ${DOLLAR}host;
-            proxy_set_header X-Project ${DOLLAR}project;
+            proxy_set_header X-Real-IP  $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_set_header Host $host;
             proxy_pass http://front;
         }
 
@@ -63,7 +62,7 @@ http {
 
         location /favicon.ico {
             expires 24h;
-            alias /web/media/${DOLLAR}project/favicon.ico;
+            alias /web/media/favicon.ico;
             break;
         }
     }

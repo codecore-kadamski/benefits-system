@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 export DOLLAR='$'
-envsubst < /etc/nginx/default.conf.template > /etc/nginx/nginx.conf
+#envsubst < /etc/nginx/default.conf.template > /etc/nginx/nginx.conf
+cat /etc/nginx/default.conf.template > /etc/nginx/nginx.conf
 nginx -g "daemon off;"
 

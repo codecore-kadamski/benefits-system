@@ -21,13 +21,13 @@ services:
   auths_domain:
     container_name: auths_domain
     restart: always
-    build:
-      context: .
-      dockerfile: ./auths_domain/Dockerfile
-      args:
-        ENVIRON: prod
-    ports:
-      - "5000:5000"
+    # build:
+    #   context: .
+    #   dockerfile: ./auths_domain/Dockerfile
+    #   args:
+    #     ENVIRON: prod
+    # ports:
+    #   - "5000:5000"
     image: auths_domain
     volumes:
       - ./auths_domain/:/app/
@@ -46,14 +46,14 @@ services:
 
   front:
     container_name: front
-    image: front
+    image: front:latest
     restart: always
-    build:
-      context: .
-      dockerfile: ./front/Dockerfile
-      args:
-        ENVIRON: prod
-    command: ["gunicorn", "wsgi:application", "-w", "5", "-b", "0.0.0.0:8000", "--capture-output", "--access-logfile", "-", "-t", "600"]
+    # build:
+    #   context: .
+    #   dockerfile: ./front/Dockerfile
+    #   args:
+    #     ENVIRON: prod
+    command: ["gunicorn", "wsgi:application", "-w", "2", "-b", "0.0.0.0:8000", "--capture-output", "--access-logfile", "-", "-t", "600"]
     networks:
         - default_net
     environment:
@@ -61,7 +61,7 @@ services:
 
   front_nginx:
     container_name: front_nginx
-    image: front_nginx
+    image: front_nginx:latest
     networks:
       default_net:
         aliases:
@@ -72,7 +72,7 @@ services:
     volumes:
       - front-media-volume:/web/media/
     ports:
-      - "13021:8000"
+      - "13021:80"
     depends_on:
       - "front"
 
