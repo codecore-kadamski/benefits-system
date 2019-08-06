@@ -42,7 +42,6 @@ def create_app(config_name):
     FlaskInjector(app=app.app, modules=[configure])
 
     db.init_app(app.app)
-    # return app
 
     with app.app.app_context():
         engine, session = get_engine_session(app.app.config)
@@ -50,5 +49,5 @@ def create_app(config_name):
         from api import models
         return app
 
-# print(os.getenv('ENVIRON', 'prod'))
+
 current_app = create_app(os.getenv('ENVIRON', 'prod'))

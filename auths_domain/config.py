@@ -1,6 +1,4 @@
 import os
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import scoped_session, sessionmaker
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -22,10 +20,7 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = os.environ.get('SECRET_KEY', 'H*%@B^*5t86exh834')
 
-    # Database
-    #  SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
     SQLALCHEMY_DATABASE_URI = 'sqlite:///{basedir}/data.db'.format(basedir=basedir)
-    #  SQLALCHEMY_DATABASE_URI = 'sqlite:///data.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", False)
     APIKEYINFO_FUNC = None
 
@@ -41,7 +36,6 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
-    #  SQLALCHEMY_DATABASE_URI = 'sqlite:///data-test.db'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///{basedir}/data-test.db'.format(basedir=basedir)
     TESTING = True
 

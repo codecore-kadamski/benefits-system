@@ -1,0 +1,8 @@
+# comment
+*/temp*
+*/*/temp*
+temp?
+.venv
+/__pycache__
+__pycache__
+poetry.lock

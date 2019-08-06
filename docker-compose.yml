@@ -6,7 +6,7 @@ networks:
 services:
   db:
     container_name: psqldb
-    image: postgres:9.6
+    image: postgres:9.6-alpine
     ports:
       - "5432:5432"
     environment:
@@ -20,15 +20,15 @@ services:
 
   auths_domain:
     container_name: auths_domain
+    image: auths_domain:latest
     restart: always
-    # build:
-    #   context: .
-    #   dockerfile: ./auths_domain/Dockerfile
-    #   args:
-    #     ENVIRON: prod
-    # ports:
-    #   - "5000:5000"
-    image: auths_domain
+    build:
+      context: ./auths_domain/
+      dockerfile: Dockerfile
+      args:
+        ENVIRON: prod
+    ports:
+      - "5000:5000"
     volumes:
       - ./auths_domain/:/app/
     depends_on:
@@ -48,11 +48,11 @@ services:
     container_name: front
     image: front:latest
     restart: always
-    # build:
-    #   context: .
-    #   dockerfile: ./front/Dockerfile
-    #   args:
-    #     ENVIRON: prod
+    build:
+      context: ./front/
+      dockerfile: Dockerfile
+      args:
+        ENVIRON: prod
     command: ["gunicorn", "wsgi:application", "-w", "2", "-b", "0.0.0.0:8000", "--capture-output", "--access-logfile", "-", "-t", "600"]
     networks:
         - default_net
@@ -62,6 +62,9 @@ services:
   front_nginx:
     container_name: front_nginx
     image: front_nginx:latest
+    build:
+      context: ./front/
+      dockerfile: Dockerfile.nginx
     networks:
       default_net:
         aliases:

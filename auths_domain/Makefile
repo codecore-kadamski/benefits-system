@@ -1,16 +1,7 @@
-#SHELL := /bin/bash
-SERVER_ROOT := auths_domain
-#APPS := '${SERVER_ROOT}.apps.$(app)'
-WAIT := 2
 RED := \u001b[0;31m
 NC := \u001b[0m
 GREEN := \u001b[0;32m
 YELLOW := \u001b[1;33m
-
-ifneq ($(sleep),)
-	WAIT=$(sleep)
-endif
-
 
 .DEFAULT_GOAL := help
 
@@ -30,35 +21,39 @@ export PRINT_HELP_PYSCRIPT
 help:
 	@-python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-migrations-prod:  ##  migracje
+migrations-prod:  ##  migracje produkcyjne w bazie postgres
 	@-export ENVIRON="prod" && poetry run python manage.py drop_db && poetry run python manage.py create_db && poetry run python manage.py db upgrade
 
-migrations-test:  ## migracje-testowe
+migrations-test: develop  ##  migracje testowe w sqlite
 	@-rm data-test.db
 	@-rm data.db
+	@-export ENVIRON="test" && poetry run python manage.py create_db && poetry run python manage.py db upgrade
 
 start-local-server:  ##  start local server
 	@-pkill gunicorn
 	@-poetry run gunicorn -c gunicorn_config wsgi
 
-start:  ##  start project in containers
-	@-docker-compose up --build -d
+build:  ##  buduje obraz kontenera
+	@-docker build -t "auths_domain:latest" .
 
-stop:  ##  stop project
-	@-docker-compose stop
-	@-docker-compose down
+run: ##  uruchamia  aplikacje w dokerze
+	@-docker run -p 5000:5000 --name auths_domain --detach auths_domain:latest
+
+stop:  ##  zatrzymuje kontener
+	@-docker stop auths_domain
+	@-docker rm auths_domain
 
 develop:  ##  poetry install requirements
 	@-poetry install -n
 
 test: migrations-test  ##  uruchamiamy testy
-	@-export ENVIRON="test" && poetry run python manage.py create_db && poetry run python manage.py db upgrade && poetry run python manage.py test
+	@-poetry run python manage.py test
 
 shell:
 	@-export ENVIRON="prod" && poetry run python manage.py shell
 
-docker-rmi:
-	@-docker rmi -f $(docker images)
+docker-rmi:  ##  usuwanie obrazów 
+	@-docker rmi -f $$(docker images)
 
-docker-rm:
-	@-docker rm $(docker ps -a -q)
+docker-rm:  ##  usuwanie kontenerów
+	@-docker rm -f $$(docker ps -a -q)
