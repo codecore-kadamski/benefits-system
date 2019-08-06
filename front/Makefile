@@ -19,6 +19,9 @@ export PRINT_HELP_PYSCRIPT
 help:
 	@-python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
+develop:  ##  poetry install requirements
+	@-poetry install -n
+
 create-volumes:
 	@echo "#### TIMESTAMP:"`date "+%s %Y-%m-%d %H:%M:%S"`" ####"
 	-docker volume create --name=$(PROJECT_NAME)-media-volume
