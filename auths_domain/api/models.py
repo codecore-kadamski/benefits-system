@@ -1,13 +1,13 @@
-import jwt
 import datetime
-from sqlalchemy import Column, DateTime, String, Integer, Boolean
-from werkzeug.security import generate_password_hash, check_password_hash
-from config import key
-from .mixins import ActiveRecordsMixin, UserMixin
 
+import jwt
+from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from config import key
+from .mixins import ActiveRecordsMixin
 
 SECRET_KEY = key
-
 
 
 def decode_auth_token(auth_token):

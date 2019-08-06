@@ -1,6 +1,5 @@
 import os
 
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 POSTGRES = {
     'user': os.environ.get('POSTGRES_USER', 'root'),

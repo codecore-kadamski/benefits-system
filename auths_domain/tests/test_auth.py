@@ -1,9 +1,11 @@
-import time
 import json
+import time
 import unittest
+
 from flask_testing import TestCase
-from app import create_app, db
+
 from api.models import User
+from app import create_app, db
 
 
 def register_user(self, email, password, username):
@@ -16,6 +18,7 @@ def register_user(self, email, password, username):
         )),
         content_type='application/json',
     )
+
 
 def login_user(self, email, password, username):
     return self.client.post(

@@ -9,8 +9,8 @@ produces:
   - "application/json"
 basePath: /api/v1
 schemes:
- - http
- - https
+  - http
+  - https
 
 securityDefinitions:
   BearerAuth:
@@ -48,12 +48,12 @@ paths:
     post:
       operationId: api.routes.register
       parameters:
-      - in: body
-        name: data
-        description: register new user
-        required: true
-        schema:
-          $ref: '#/definitions/User'
+        - in: body
+          name: data
+          description: register new user
+          required: true
+          schema:
+            $ref: '#/definitions/User'
       security: []
       responses:
         200:
@@ -69,12 +69,12 @@ paths:
     post:
       operationId: api.routes.login
       parameters:
-      - in: body
-        name: data
-        description: login user
-        required: true
-        schema:
-          $ref: '#/definitions/User'
+        - in: body
+          name: data
+          description: login user
+          required: true
+          schema:
+            $ref: '#/definitions/User'
       security: []
       responses:
         200:
@@ -120,11 +120,11 @@ paths:
     post:
       operationId: api.routes.create
       parameters:
-      - in: body
-        name: data
-        description: uzytkownik to add
-        schema:
-          $ref: '#/definitions/User'
+        - in: body
+          name: data
+          description: uzytkownik to add
+          schema:
+            $ref: '#/definitions/User'
       responses:
         201:
           description: Successfully added product to the DB
@@ -135,35 +135,35 @@ paths:
 
 
   /users/{user_id}:
-      get:
-        operationId: api.routes.read
-        parameters:
-          - in: path
-            name: user_id
-            type: string
-            required: true
-            description: Numeric ID of the user to get.
-        responses:
-          '200':
-            description: 'Fetch a product from the database'
-            schema:
-                $ref: '#/definitions/User'
-      delete:
-        tags:
+    get:
+      operationId: api.routes.read
+      parameters:
+        - in: path
+          name: user_id
+          type: string
+          required: true
+          description: Numeric ID of the user to get.
+      responses:
+        '200':
+          description: 'Fetch a product from the database'
+          schema:
+            $ref: '#/definitions/User'
+    delete:
+      tags:
         - public
-        parameters:
-          - in: path
-            name: user_id
-            type: string
-            required: true
-            description: Numeric ID of the user to get.    
-        operationId: api.routes.delete
-        responses:
-          200:
-            description: Successfully deleted product 
-          400:
-            description: invalid input, object invalid
-          409:
-            description: conflict error
-          401:
-            description: Not correctly authorized
+      parameters:
+        - in: path
+          name: user_id
+          type: string
+          required: true
+          description: Numeric ID of the user to get.
+      operationId: api.routes.delete
+      responses:
+        200:
+          description: Successfully deleted product
+        400:
+          description: invalid input, object invalid
+        409:
+          description: conflict error
+        401:
+          description: Not correctly authorized

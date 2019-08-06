@@ -1,5 +1,6 @@
 from injector import inject
-from .views import UserProvider, AuthProvider
+
+from .views import AuthProvider, UserProvider
 
 
 @inject(data_provider=UserProvider)
@@ -36,9 +37,11 @@ def register(data_provider, data) -> str:
 def login(data_provider, data) -> str:
     return data_provider.login(data)
 
+
 @inject(data_provider=AuthProvider)
 def verify(data_provider) -> str:
     return data_provider.verify()
+
 
 @inject(data_provider=AuthProvider)
 def logout(data_provider) -> str:

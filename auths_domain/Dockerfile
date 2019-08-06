@@ -6,8 +6,6 @@ RUN pip install --upgrade pip
 
 RUN pip install poetry==0.11.5 && poetry config settings.virtualenvs.create false
 
-#ADD . /
-
 RUN mkdir -p /app
 WORKDIR /app
 COPY pyproject.toml .

@@ -1,17 +1,16 @@
 import os
-from flask_sqlalchemy import SQLAlchemy
-from flask_injector import FlaskInjector
 
 import connexion
 from connexion.resolver import RestyResolver
-from api.models import BaseModel
-
-from config import config_by_name
-from injector import Binder
 from flask_cors import CORS
+from flask_injector import FlaskInjector
+from flask_sqlalchemy import SQLAlchemy
+from injector import Binder
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+from api.models import BaseModel
+from config import config_by_name
 
 db = SQLAlchemy()
 
@@ -29,8 +28,6 @@ def get_engine_session(config):
     engine = create_engine(config['SQLALCHEMY_DATABASE_URI'])
     session = scoped_session(sessionmaker(bind=engine))
     BaseModel.set_session(session)
-    # # Base.metadata.drop_all(engine)
-    # # Base.metadata.create_all(engine)
     return engine, session
 
 
@@ -45,8 +42,6 @@ def create_app(config_name):
 
     with app.app.app_context():
         engine, session = get_engine_session(app.app.config)
-        from api import routes
-        from api import models
         return app
 
 

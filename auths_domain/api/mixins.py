@@ -1,10 +1,7 @@
-#  from sqlalchemy.orm import Session, scoped_session, Query
 from sqlalchemy import inspect
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from sqlalchemy.orm import RelationshipProperty
-from flask_login import UserMixin
-
 
 Base = declarative_base()
 

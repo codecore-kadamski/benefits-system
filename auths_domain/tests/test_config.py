@@ -1,6 +1,8 @@
 import unittest
-from flask_testing import TestCase
+
 from flask import current_app
+from flask_testing import TestCase
+
 from app import create_app, db
 
 
