@@ -30,13 +30,21 @@ export PRINT_HELP_PYSCRIPT
 help:
 	@-python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-migrations:  ##  migracje
-	@-poetry run python manage.py db migrate
-	@-poetry run python manage.py db upgrade
+db-init:
+	@-rm -rf migrations
+	@-export ENVIRON="dev" && poetry run python manage.py db init && poetry run python manage.py db revision
+	@-export ENVIRON="test" && poetry run python manage.py db init && poetry run python manage.py db revision
+	@-export ENVIRON="prod" && poetry run python manage.py db init && poetry run python manage.py db revision
 
-migrations-test:  ## migracje-testowe
-	@-rm data-test.db
-	@-rm data.db
+migrations-dev:  ##  migracje dev
+	@-export ENVIRON="dev" && poetry run python manage.py db migrate && poetry run python manage.py db upgrade
+
+migrations-test:  ##  migracje test
+	@-export ENVIRON="test" && poetry run python manage.py db migrate && poetry run python manage.py db upgrade
+
+# migrations-test:  ## migracje-testowe
+# 	@-rm data-test.db
+# 	@-rm data.db
 
 start-local-server:  ##  start local server
 	@-poetry run gunicorn -c gunicorn_config wsgi

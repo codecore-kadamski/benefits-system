@@ -1,13 +1,22 @@
 import os
 import unittest
+from flask_sqlalchemy import SQLAlchemy
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from api import app, db  # create_app
+from api.models import User
 
 
-app.app.app_context().push()
+MIGRATION_DIR = {
+    'dev': os.path.join('migrations', 'dev'),
+    'test': os.path.join('migrations', 'test'),
+    'prod': os.path.join('migrations', 'prod'),
+}
 
-migrate = Migrate(app.app, db)
+#  app.app.app_context().push()
+#  db = SQLAlchemy(app)
+migrate = Migrate(app.app, db, directory=MIGRATION_DIR.get(os.getenv('ENVIRON', 'dev')))
+
 manager = Manager(app.app)
 manager.add_command('db', MigrateCommand)
 

@@ -31,7 +31,7 @@ class BaseModel(Base):
         }
 
 
-class UserModel(BaseModel, UserMixin):
+class User(BaseModel, UserMixin):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
