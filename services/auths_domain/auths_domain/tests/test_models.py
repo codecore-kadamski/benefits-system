@@ -1,8 +1,7 @@
 import unittest
 from flask_testing import TestCase
-#  from api import create_app, db
-from auths_domain import create_app, db
-from app.models import User
+from auths_domain.core import create_app, db
+from auths_domain.models import User
 
 
 class TestUserModel(TestCase):

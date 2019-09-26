@@ -105,4 +105,6 @@ venv.bak/
 
 
 .idea
-auths_domain/data-test.db
+services/auths_domain/data.db
+services/auths_domain/auths_domain/data-test.db
+services/auths_domain/auths_domain/migrations/test/versions/**

@@ -1,7 +1,7 @@
 import unittest
 from flask_testing import TestCase
-#  from flask import current_app
-from auths_domain import create_app, db
+from flask import current_app
+from auths_domain.core import create_app, db
 
 
 class TestDevelopmentConfig(TestCase):
@@ -21,7 +21,10 @@ class TestDevelopmentConfig(TestCase):
     def test_app_is_development(self):
         self.assertTrue(self.app.config['DEBUG'] is True)
         self.assertFalse(current_app is None)
-        self.assertTrue('data.db' in self.app.config['SQLALCHEMY_DATABASE_URI'])
+        #  self.assertTrue('data.db' in self.app.config['SQLALCHEMY_DATABASE_URI'])
+        self.assertTrue(
+            self.app.config['SQLALCHEMY_DATABASE_URI'] == 'postgresql://root:test@localhost:5432/benefits'
+        )
 
 
 class TestProductionConfig(TestCase):
